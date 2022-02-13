@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "nodemon --ext ts --exec 'ts-node src/index.ts'",
     "build": "tsc",
-    "start": "node src/index.js",
+    "start": "node build/index.js",
     "fix-code": "eslint --fix --ext .tsx --ext .ts src/",
     "eslint": "eslint --ext .tsx --ext .ts src/"
   },
