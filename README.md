@@ -21,3 +21,9 @@ node index.js
 https://github.com/dinchak/node-easymidi
 https://github.com/Jafner/pamidi/blob/main/pamidi.sh
 https://mediadl.musictribe.com/media/PLM/data/docs/P0B3M/X-TOUCH%20MINI_QSG_WW.pdf
+
+## TODO
+
+- [ ] Set nr of controllers and determine last for microphone
+- [ ] Handle max number of streams based on controllers
+- [ ] Add player support
