@@ -11,3 +11,5 @@ export type mediaChannelType = {
 export type mediaChannelsType = {
   [key: number]: mediaChannelType;
 }
+
+export type mediaPlayerStatusType = 'playing' | 'paused' | 'stopped';
