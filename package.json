@@ -1,5 +1,18 @@
 {
+  "scripts": {
+    "dev": "nodemon --ext ts --exec 'ts-node src/index.ts'",
+    "build": "tsc",
+    "start": "node src/index.js",
+    "fix-code": "eslint --fix --ext .tsx --ext .ts src/",
+    "eslint": "eslint --ext .tsx --ext .ts src/"
+  },
   "dependencies": {
     "easymidi": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
   }
 }
