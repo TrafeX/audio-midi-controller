@@ -2,8 +2,8 @@ import { exec } from '../helpers/exec';
 import { mediaChannelsType, mediaTypeType } from '../types';
 
 const sinkInputsRegex = /index: ([0-9]+).*?volume:.*?([0-9]+)%.*?muted: (yes|no).*?application\.name = "([a-z_ -]+)"/gis;
-const sinksRegex = /\* index: ([0-9]+).*?volume:.*?([0-9]+)%.*?muted: (yes|no)/gis;
-const inputSourcesRegex = /\* index: ([0-9]+).*?volume:.*?([0-9]+)%.*?muted: (yes|no)/gis;
+const sinksRegex = /\* index: ([0-9]+).*?volume:.*?([0-9]+)%.*?muted: (yes|no).*?device\.description = "([a-z_ -]+)"/gis;
+const inputSourcesRegex = /\* index: ([0-9]+).*?volume:.*?([0-9]+)%.*?muted: (yes|no).*?device\.description = "([a-z_ -]+)"/gis;
 
 export const fetchMediaChannels = async (): Promise<mediaChannelsType> => {
 
@@ -13,7 +13,7 @@ export const fetchMediaChannels = async (): Promise<mediaChannelsType> => {
       index: match[1],
       volume: Number(match[2]),
       muted: match[3] === 'yes',
-      name: 'Unknown',
+      name: match[4],
       type: 'sink' as mediaTypeType,
     };
   });
@@ -35,7 +35,7 @@ export const fetchMediaChannels = async (): Promise<mediaChannelsType> => {
       index: match[1],
       volume: Number(match[2]),
       muted: match[3] === 'yes',
-      name: 'Unknown',
+      name: match[4],
       type: 'source' as mediaTypeType,
     };
   });
