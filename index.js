@@ -1,9 +1,11 @@
-const easymidi = require('easymidi');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+import easymidi from 'easymidi';
+import { promisify } from 'util';
+import { exec as syncExec } from 'child_process';
+import { fetchPlayerStatus } from './lib/playerctl.js';
+
+const exec = promisify(syncExec);
 
 const MIDI_DEVICE = 'X-TOUCH MINI:X-TOUCH MINI MIDI 1 28:0';
-
 
 console.log(easymidi.getInputs());
 const input = new easymidi.Input(MIDI_DEVICE);
@@ -49,13 +51,13 @@ const fetchSinkInputs = async () => {
   });
 
   const allChannels = [...sinksIndices, ...sinkInputIndices];
-  allChannels[7] = {...inputSourcesIndices[0]};
+  allChannels[7] = { ...inputSourcesIndices[0] };
   return allChannels;
 };
 
 const initializeMidi = () => {
 
-  for (i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 8; i++) {
     output.send('cc', {
       controller: i,
       value: 2,
@@ -64,7 +66,7 @@ const initializeMidi = () => {
   }
 }
 
-const updateMidi = (sinks) => {
+const updateMidiChannels = (sinks) => {
 
   for (let controllerNr = 0; controllerNr < 8; controllerNr++) {
     if (sinks[controllerNr]) {
@@ -78,7 +80,7 @@ const updateMidi = (sinks) => {
 
 const setMidiSink = (sink, controllerNr) => {
   output.send('cc', {
-    controller: controllerNr+1,
+    controller: controllerNr + 1,
     value: volumePercentageToEncoder(sink.volume),
     channel: 10
   })
@@ -92,7 +94,7 @@ const setMidiSink = (sink, controllerNr) => {
 
 const clearMidiSink = (controllerNr) => {
   output.send('cc', {
-    controller: controllerNr+1,
+    controller: controllerNr + 1,
     value: 0,
     channel: 10
   })
@@ -104,30 +106,51 @@ const clearMidiSink = (controllerNr) => {
   })
 }
 
+const updateMidiPlayStatus = (status) => {
+  if (status === 'playing') {
+    output.send('noteon', {
+      note: 22,
+      velocity: 127,
+      channel: 10
+    });
+  } else if (status === 'paused') {
+    output.send('noteon', {
+      note: 14,
+      velocity: 2,
+      channel: 0
+    });
+  } else {
+    output.send('noteoff', {
+      note: 22,
+      velocity: 0,
+      channel: 10
+    });
+  }
+}
+
 const volumePercentageToEncoder = (volume) => Math.round(volume / 100 * 127);
 const volumeEncoderValueToPercentage = (volume) => Math.round(volume / 127 * 100);
 
-
-
-
 const setSinkVolume = async (sink, volume) => {
-    console.log(`Setting ${sink.index} to ${volume}%`);
-  
-    const setVolume = exec(`pactl set-${sink.type}-volume ${sink.index} ${volume}%`);
+  console.log(`Setting ${sink.index} to ${volume}%`);
 
-    const { stdout, stderr } = await setVolume;
-    console.log(stdout);
+  const setVolume = exec(`pactl set-${sink.type}-volume ${sink.index} ${volume}%`);
+
+  const { stdout, stderr } = await setVolume;
+  if (stderr) {
     console.error(stderr);
+  }
 }
 
 const setSinkMuteState = async (sink, muted) => {
 
   const mutedState = muted ? 'on' : 'off';
-    console.log(`Setting ${sink.index} muted state to ${mutedState}`);
-  
-    const { stdout, stderr } = await exec(`pactl set-${sink.type}-mute ${sink.index} toggle`);
-    console.log(stdout);
+  console.log(`Setting ${sink.index} muted state to ${mutedState}`);
+
+  const { stdout, stderr } = await exec(`pactl set-${sink.type}-mute ${sink.index} toggle`);
+  if (stderr) {
     console.error(stderr);
+  }
 }
 
 input.on('noteoff', msg => console.log('noteoff', msg.note, msg.velocity, msg.channel));
@@ -140,11 +163,31 @@ input.on('noteon', async (msg) => {
   }
   if (msg.note === 21) {
     // Stop
-    await exec('xdotool key XF86AudioStop');
+    const { stderr } = await exec('playerctl stop');
+    if (stderr) {
+      console.error(stderr);
+    }
   }
   if (msg.note === 22) {
     // Play
-    await exec('xdotool key XF86AudioPlay');
+    const { stderr } = await exec('playerctl play-pause');
+    if (stderr) {
+      console.error(stderr);
+    }
+  }
+  if (msg.note === 19) {
+    // Next
+    const { stderr } = await exec('playerctl next');
+    if (stderr) {
+      console.error(stderr);
+    }
+  }
+  if (msg.note === 18) {
+    // Next
+    const { stderr } = await exec('playerctl previous');
+    if (stderr) {
+      console.error(stderr);
+    }
   }
 });
 
@@ -161,9 +204,10 @@ input.on('cc', async (msg) => {
 initializeMidi();
 setInterval(async () => {
   sinks = await fetchSinkInputs();
-  
-  // console.log(sinks)
-  updateMidi(sinks);
+  const playerStatus = await fetchPlayerStatus();
+
+  updateMidiChannels(sinks);
+  updateMidiPlayStatus(playerStatus);
 }, 1000);
 
 

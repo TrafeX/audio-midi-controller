@@ -5,6 +5,9 @@ Flow
 * Map volume and mute state from sinks to encoders
 * Be able to control sinks 
 
+## Dependencies
+
+`playerctl`
 
 ## Run
 
