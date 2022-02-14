@@ -1,12 +1,12 @@
 import { volumePercentageToEncoder } from '../helpers/volume';
 import { mediaChannelsType, mediaChannelType } from "../types";
-import { midiOutput } from './midiConnection';
+import { midiNrOfChannels, midiOutput } from './midiConnection';
 
 export const updateMidiChannels = (mediaChannels: () => mediaChannelsType) => {
 
-  for (let controllerNr = 0; controllerNr < 8; controllerNr++) {
+  for (let controllerNr = 0; controllerNr < midiNrOfChannels(); controllerNr++) {
     if (mediaChannels()[controllerNr]) {
-      console.log(`Setting ${controllerNr} (${mediaChannels()[controllerNr].name}) to ${mediaChannels()[controllerNr].volume}`);
+      // console.log(`Setting ${controllerNr} (${mediaChannels()[controllerNr].name}) to ${mediaChannels()[controllerNr].volume}`);
       setMidiSink(mediaChannels()[controllerNr], controllerNr);
     } else {
       clearMidiSink(controllerNr);

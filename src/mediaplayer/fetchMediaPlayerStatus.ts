@@ -10,4 +10,4 @@ export const fetchMediaPlayerStatus = async (): Promise<mediaPlayerStatusType> =
     console.error(e);
     return 'stopped';
   }
-}
+};

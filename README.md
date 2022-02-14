@@ -26,4 +26,4 @@ https://mediadl.musictribe.com/media/PLM/data/docs/P0B3M/X-TOUCH%20MINI_QSG_WW.p
 
 - [ ] Set nr of controllers and determine last for microphone
 - [ ] Handle max number of streams based on controllers
-- [ ] Add player support
+- [x] Add player support
