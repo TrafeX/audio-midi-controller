@@ -6,12 +6,13 @@ export const updateMidiChannels = (mediaChannels: () => mediaChannelsType) => {
 
   for (let controllerNr = 0; controllerNr < midiNrOfChannels(); controllerNr++) {
     if (mediaChannels()[controllerNr]) {
-      // console.log(`Setting ${controllerNr} (${mediaChannels()[controllerNr].name}) to ${mediaChannels()[controllerNr].volume}`);
+      console.log(`Controller ${controllerNr+1}: ${mediaChannels()[controllerNr].name}`);
       setMidiSink(mediaChannels()[controllerNr], controllerNr);
     } else {
       clearMidiSink(controllerNr);
     }
   }
+  console.log('---');
 };
 
 const setMidiSink = (mediaChannel: mediaChannelType, controllerNr: number) => {

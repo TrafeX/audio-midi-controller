@@ -14,6 +14,6 @@ import { mediaChannels, setMediaChannels } from './state/mediaChannels';
 
     updateMidiChannels(mediaChannels);
 
-    updateMediaPlayer(await fetchMediaPlayerStatus());
+    updateMediaPlayer(await fetchMediaPlayerStatus(), mediaChannels);
   }, 1000);
 })();

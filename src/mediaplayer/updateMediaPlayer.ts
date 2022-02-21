@@ -1,7 +1,14 @@
 import { midiOutput } from "../midi/midiConnection";
-import { mediaPlayerStatusType } from "../types";
+import { mediaChannelsType, mediaPlayerStatusType } from "../types";
 
-export const updateMediaPlayer = (playerStatus: mediaPlayerStatusType) => {
+export const updateMediaPlayer = (playerStatus: mediaPlayerStatusType | null, mediaChannels: () => mediaChannelsType) => {
+  const playingChannel = mediaChannels().filter(mediaChannel => {
+    return mediaChannel.type === 'sink-input' && mediaChannel.state === 'RUNNING' && mediaChannel.name !== 'Google Chrome';
+  });
+
+  if (playingChannel.length > 0) {
+    playerStatus = 'playing';
+  }
 
   if (playerStatus === 'playing') {
     midiOutput().send('noteon', {
