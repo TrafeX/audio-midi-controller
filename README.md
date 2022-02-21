@@ -18,10 +18,13 @@ It integrates with PulseAudio and maps every audio channel to an encoder on the 
 
 * Ubuntu or other Linux distro that uses PulseAudio
 * Package `playerctl` to be able to control the media (`sudo apt install playerctl`)
+* Package `libasound2-dev` and `python` for the MIDI library (`sudo apt install libasound2-dev python`)
 * Node 16+
 * NPM 7+
 
 ## How to use
+
+Checkout this repository, and run the following commands;
 
 ```
 npm install
