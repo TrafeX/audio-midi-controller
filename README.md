@@ -1,29 +1,39 @@
-# Midi control
+# Control PulseAudio with a MIDI controller
 
-Flow
-* Get sinks
-* Map volume and mute state from sinks to encoders
-* Be able to control sinks 
+This project lets you use the Behringer X-Touch Mini to control your audio.
+It integrates with PulseAudio and maps every audio channel to an encoder on the Behringer X-Touch Mini.
+
+## Features
+
+* The volume of every audio channel (input or output) in PulseAudio is controllable with an encoder on the Behringer X-Touch Mini.
+* All audio channels can be muted using the buttons below the encoders.
+* The LED ring around the encoders will show the volume level.
+* Audio in your browser or in a program like Spotify can be played, paused, stopped.
+* When media is playing or paused, the play button is lit or blinking.
+* The first encoder is always the main volume, the last is always the active microphone.
+
+![Behringer X-Touch Mini](assets/behringer-x-touch-mini.jpg "Behringer X-Touch Mini")
 
 ## Dependencies
 
-`playerctl`
+* Ubuntu or other Linux distro that uses PulseAudio
+* Package `playerctl` to be able to control the media (`sudo apt install playerctl`)
+* Node 16+
+* NPM 7+
 
-## Run
+## How to use
 
 ```
-unalias node npm
-node index.js
+npm install
+npm run start
 ```
 
+The output will show how the audio channels are mapped to the encoders. This updates every second;
 
-## Resources
-https://github.com/dinchak/node-easymidi
-https://github.com/Jafner/pamidi/blob/main/pamidi.sh
-https://mediadl.musictribe.com/media/PLM/data/docs/P0B3M/X-TOUCH%20MINI_QSG_WW.pdf
-
-## TODO
-
-- [ ] Set nr of controllers and determine last for microphone
-- [ ] Handle max number of streams based on controllers
-- [x] Add player support
+```
+...
+Controller 1: Built-in Audio Analog Stereo
+Controller 2: Google Chrome
+Controller 3: spotify
+Controller 8: Blue Snowball Mono
+```
