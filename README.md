@@ -24,7 +24,7 @@ It integrates with PulseAudio and maps every audio channel to an encoder on the 
 
 ## How to use
 
-Checkout this repository, and run the following commands;
+Checkout this repository, connect your Behringer X-Touch Mini (in standard mode), and run the following commands;
 
 ```
 npm install
