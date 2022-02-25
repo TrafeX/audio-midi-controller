@@ -7,7 +7,6 @@ export const fetchMediaPlayerStatus = async (): Promise<mediaPlayerStatusType|nu
     const { stdout } = await exec('playerctl status');
     return stdout.toLowerCase().trim() as mediaPlayerStatusType;
   } catch (e) {
-    console.error(e);
     return null;
   }
 };

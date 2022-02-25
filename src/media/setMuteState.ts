@@ -3,7 +3,7 @@ import { mediaChannelType } from "../types";
 
 export const toggleMuteState = async (mediaChannel: mediaChannelType) => {
 
-  console.log(`Setting ${mediaChannel.index} muted state`);
+  console.log(`Setting ${mediaChannel.name} muted state`);
 
   try {
     await exec(`pactl set-${mediaChannel.type}-mute ${mediaChannel.index} toggle`);

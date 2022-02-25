@@ -6,7 +6,7 @@ export const updateMidiChannels = (mediaChannels: () => mediaChannelsType) => {
 
   for (let controllerNr = 0; controllerNr < midiNrOfChannels(); controllerNr++) {
     if (mediaChannels()[controllerNr]) {
-      console.log(`Controller ${controllerNr+1}: ${mediaChannels()[controllerNr].name}`);
+      console.log(`Controller ${controllerNr+1}: ${mediaChannels()[controllerNr].name} (${mediaChannels()[controllerNr].volume}%, ${mediaChannels()[controllerNr].muted ? 'muted' : 'unmuted'})`);
       setMidiSink(mediaChannels()[controllerNr], controllerNr);
     } else {
       clearMidiSink(controllerNr);

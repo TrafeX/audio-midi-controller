@@ -7,9 +7,6 @@ import { midiInput } from "./midiConnection";
 
 export const listenToMidi = (mediaChannels: () => mediaChannelsType): void => {
 
-  midiInput().on('noteoff', msg => console.log('noteoff', msg.note, msg.velocity, msg.channel));
-  midiInput().on('noteon', msg => console.log('noteon', msg.note, msg.velocity, msg.channel));
-
   midiInput().on('noteon', async msg => {
     if (mediaChannels()[msg.note - 8]) {
       const currentChannel = mediaChannels()[msg.note - 8];
@@ -31,5 +28,4 @@ export const listenToMidi = (mediaChannels: () => mediaChannelsType): void => {
     if (msg.note === 19) await nextMedia();
     if (msg.note === 18) await previousMedia();
   });
-
 };
